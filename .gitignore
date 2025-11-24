@@ -48,3 +48,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .DS_Store
+Data/WUP2025_Cities_Indicators.csv
+Data/WUP2025-DB-DEGURBA-Population-by-size-class-of-cities.csv
+Data/WUP2025-DB-DEGURBA-Cities-Population-Surface-Data.csv
