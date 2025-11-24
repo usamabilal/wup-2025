@@ -1,0 +1,82 @@
+---
+title: "Exploring the World Urbanization Prospects 2025 edition"
+author: "Usama Bilal"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-expand: true
+    self-contained: true
+    code-fold: false
+    df-print: kable
+    code-tools: true
+    code-block-border-left: '#39b69d'
+    code-block-bg: '#ebf0ef'
+comments:
+  hypothesis:
+    theme: clean
+editor: source
+execute:
+  warning: false
+  message: false
+  eval: true
+editor_options:
+  chunk_output_type: console
+---
+
+# 1. Objective
+
+To explore the World Urbanization Prospects 2025 edition dataset.
+
+# 2. Setup
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+# 3. Load Data
+
+Downloaded from https://population.un.org/wup/downloads?tab=CSV%20Format 
+
+```{r load-data}
+metadata <- read_csv("Data/WUP2025_Cities_Indicators.csv")
+# this contains aggregates by city size class
+dta1 <- read_csv(
+  "Data/WUP2025-DB-DEGURBA-Population-by-size-class-of-cities.csv"
+)
+# this contains data by individual cities
+dta2 <- read_csv("Data/WUP2025-DB-DEGURBA-Cities-Population-Surface-Data.csv")
+
+metadata |> print(n = 50) |> knitr::kable()
+
+head(dta1)
+head(dta2)
+```
+
+# 4. Explore Data for SALURBAL countries
+```{r explore-salurbal}
+salurbal_countries <- c(
+  "AR",
+  "BR",
+  "CL",
+  "CO",
+  "CR",
+  "MX",
+  "PA",
+  "PE",
+  "GT",
+  "SV",
+  "NI"
+)
+dta2 <- dta2 |>
+  filter(ISO2_Code %in% salurbal_countries)
+ggplot(dta2, aes(x = Year, y = Pop, group = City_Name)) +
+  geom_line(alpha = 0.3) +
+  facet_wrap(~ISO2_Code, scales = "free_y") +
+  scale_y_continuous(trans = "log10") +
+  theme_minimal() +
+  labs(
+    title = "City Population Trends in SALURBAL countries",
+    x = "Year",
+    y = "Population"
+  )
+```
